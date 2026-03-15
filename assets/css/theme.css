@@ -1,0 +1,176 @@
+/* assets/css/theme.css */
+/* Estilos base para el contenido Markdown renderizado */
+
+.content {
+    /* Fuentes base - Asegúrate de que IBM Plex Sans y Serif estén cargadas */
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: #374151; /* gray-700 */
+    line-height: 1.7; /* Interlineado base */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Tipografía --- */
+
+.content p {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 1.125rem; /* Equivalente a text-lg de Tailwind (18px). Puedes cambiar a 1.25rem para text-xl si prefieres */
+    line-height: 1.625; /* leading-relaxed */
+    margin-bottom: 1.25em;
+}
+
+.content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    margin-top: 1.8em;
+    margin-bottom: 0.8em;
+    line-height: 1.3;
+    font-weight: 700; /* Bold por defecto */
+    color: #1f2937; /* gray-800 */
+}
+
+.content h1 { font-size: 1.875rem; padding-bottom: 0.4em; } /* text-3xl */
+.content h2 { font-size: 1.5rem; font-weight: 600; padding-bottom: 0.3em; } /* text-2xl, semibold */
+.content h3 { font-size: 1.25rem; font-weight: 500; } /* text-xl, medium */
+.content h4 { font-size: 1.125rem; font-weight: 600; color: #4b5563; } /* text-lg, semibold, gray-600 */
+.content h5 { font-size: 1rem; font-weight: 600; } /* text-base, semibold */
+.content h6 { font-size: 0.875rem; font-weight: 600; color: #6b7280; } /* text-sm, semibold, gray-500 */
+
+.content strong { font-weight: 700; }
+.content em { font-style: italic; }
+
+/* --- Listas --- */
+.content ul, .content ol { margin-bottom: 1.25em; padding-left: 2em; }
+.content ul { list-style-type: disc; }
+.content ol { list-style-type: decimal; }
+.content li { margin-bottom: 0.6em; }
+/* Hereda la fuente del párrafo si hay un <p> dentro de <li> */
+.content li p { margin-bottom: 0; }
+
+/* Estilos de listas anidadas */
+.content ul ul, .content ol ul { list-style-type: circle; margin-top: 0.6em; margin-bottom: 0.6em; }
+.content ol ol, .content ul ol { list-style-type: lower-alpha; margin-top: 0.6em; margin-bottom: 0.6em; }
+.content ul ul ul, .content ol ul ul { list-style-type: square; }
+.content ol ol ol, .content ul ol ol { list-style-type: lower-roman; }
+
+
+/* --- Enlaces --- */
+.content a {
+    color: #2563eb; /* blue-600 */
+    text-decoration: underline;
+    text-decoration-color: #93c5fd; /* blue-300 */
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+.content a:hover {
+    color: #1d4ed8; /* blue-700 */
+    text-decoration-color: #1d4ed8;
+}
+
+/* --- Imágenes --- */
+/* Estilos base para todas las imágenes en content */
+.content img {
+    display: block;
+    max-width: 100%; /* Que no se desborde */
+    height: auto;
+}
+
+/* Estilos decorativos opcionales - aplicar solo cuando se desee el estilo completo */
+.content .md-image-styled {
+    margin: 2em auto; /* Centrado verticalmente con margen */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+}
+
+/* Para limitar el ancho en pantallas grandes */
+@media (min-width: 768px) {
+    .content .md-image-styled {
+         max-width: 90%; /* O el porcentaje que prefieras */
+    }
+}
+
+
+/* --- Código --- */
+.content code:not(pre > code) { /* Inline Code */
+  background-color: #eef2ff; /* indigo-50 */
+  color: #4338ca; /* indigo-700 */
+  padding: 0.2em 0.5em;
+  margin: 0 0.1em;
+  font-size: 0.875em;
+  border-radius: 0.25rem;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  vertical-align: middle;
+}
+.content pre { /* Block Code Container */
+  background-color: #1f2937; /* gray-800 */
+  color: #e5e7eb; /* gray-200 */
+  padding: 1.2em 1.5em;
+  margin-bottom: 1.5em;
+  overflow-x: auto;
+  border-radius: 0.5rem; /* rounded-lg */
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  line-height: 1.6;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-sm */
+}
+.content pre code { /* Code inside Pre */
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  border-radius: 0;
+  vertical-align: baseline; /* Cambiado de 'initial' a 'baseline' */
+}
+
+/* --- Citas (Blockquotes) --- */
+.content blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 1.5em;
+  padding: 1em 1.5em;
+  border-left: 4px solid #60a5fa; /* blue-400, grosor 4px */
+  background-color: #eff6ff; /* blue-50 */
+  color: #1e40af; /* blue-800 */
+  font-style: normal; /* Quita la cursiva base si no se desea */
+}
+/* Párrafos dentro de blockquote heredan fuente Serif */
+.content blockquote p {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 1.125rem; /* O el tamaño que prefieras */
+    line-height: 1.625;
+}
+.content blockquote p:last-child { margin-bottom: 0; }
+
+/* --- Líneas Horizontales --- */
+ .content hr {
+    border: 0;
+    height: 1px; /* Línea más fina */
+    background-color: #d1d5db; /* gray-300 */
+    margin: 2.5em 0;
+ }
+
+/* --- Tablas --- */
+.content table {
+  font-family: 'IBM Plex Sans', sans-serif; /* Asegura Sans para tablas */
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5em;
+  font-size: 0.95em;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05); /* shadow */
+  border-radius: 0.375rem; /* rounded-md */
+  overflow: hidden; /* Para que el borde redondeado funcione */
+  border: 1px solid #e5e7eb; /* gray-200 - Borde exterior */
+}
+.content th, .content td {
+  border: 1px solid #e5e7eb; /* gray-200 - Bordes internos */
+  padding: 0.8em 1em;
+  text-align: left;
+}
+.content th {
+  background-color: #f9fafb; /* gray-50 */
+  font-weight: 600; /* semibold */
+  color: #1f2937; /* gray-800 */
+}
+/* Alternating row color */
+.content tr:nth-child(even) td { /* Aplicar solo a td para no afectar th */
+    background-color: #f9fafb; /* gray-50 */
+}
