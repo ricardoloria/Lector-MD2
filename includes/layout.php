@@ -69,14 +69,6 @@ $openGraphTags = generateOpenGraphTags($socialMetadata, $urlToShare);
         }
     </script>
     
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8Q7TGNZ4CY"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-8Q7TGNZ4CY');
-    </script>
 </head>
 <body class="bg-gray-100">
 
