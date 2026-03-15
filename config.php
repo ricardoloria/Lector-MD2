@@ -26,8 +26,8 @@ $config = [
     // 'base_url' => 'https://www.ricardoloria.com/cotidianeidades/',
     
     'content_dir' => 'content',
-    'app_title' => 'Cotidianeidades',
-    'autor_title' => 'Ricardo Loría',
+    'app_title' => 'Lector MD',
+    'autor_title' => 'Juan Pérez',
     'display_errors' => true,
     'theme_color' => 'blue',
     'display_options' => [
