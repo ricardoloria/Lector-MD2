@@ -3,6 +3,8 @@
  * Vista de la página de inicio (Landing) - Versión con Tailwind
  * Se ha corregido la lógica de visualización de imágenes del Front Matter y añadido soporte para YouTube.
  */
+$appTitle = $config['app_title'] ?? 'Lector de Markdown'; // Obtener título desde config
+$autorTitle = $config['autor_title'] ?? 'Autor';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -24,7 +26,7 @@
             <?php echo $config['app_title']; ?>
         </h1>
         <p class="text-xl md:text-xl font-bold text-gray-500 hover:text-green-600">
-            <a href="https://ricardoloria.com/" class="">Ricardo Loría</a> 
+            <a href="#" class=""><?php echo htmlspecialchars($autorTitle); ?></a> 
         </p>
     </header>
 
@@ -113,7 +115,7 @@
 
     <footer class="max-w-7xl mx-auto px-8 md:px-16 py-8 w-full border-t border-gray-100">
         <p class="text-[16px] font-bold text-gray-400">
-            Ricardo Loría © <?php echo date('Y'); ?>
+            <?php echo htmlspecialchars($autorTitle); ?> © <?php echo date('Y'); ?>
         </p>
     </footer>
 
