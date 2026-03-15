@@ -450,4 +450,69 @@ function generateSocialMetaTags($meta, $currentUrl) {
     
     return $html;
 }
+
+/**
+ * Escanea el directorio de contenido y devuelve un array de archivos .md
+ */
+function getMarkdownFiles($dir) {
+    $files = [];
+    if (!is_dir($dir)) return $files;
+
+    $items = scandir($dir);
+    foreach ($items as $item) {
+        if ($item == '.' || $item == '..') continue;
+        $path = $dir . DIRECTORY_SEPARATOR . $item;
+        if (is_dir($path)) {
+            $files = array_merge($files, getMarkdownFiles($path));
+        } else if (pathinfo($path, PATHINFO_EXTENSION) == 'md') {
+            $files[] = $path;
+        }
+    }
+    return $files;
+}
+
+/**
+ * Parsea el Front Matter de un archivo Markdown
+ */
+function parseMarkdownFrontMatter($filePath) {
+    if (!file_exists($filePath)) return ['title' => basename($filePath, '.md'), 'content' => ''];
+
+    $content = file_get_contents($filePath);
+    
+    // Expresión regular mejorada: 
+    // - Permite espacios/saltos de línea al inicio (\s*)
+    // - Maneja variaciones de saltos de línea (\r?\n)
+    // - Hace que el cuerpo sea opcional
+    $pattern = '/^\s*---\s*\r?\n(.*?)\r?\n---\s*(?:\r?\n(.*))?$/s';
+
+    if (preg_match($pattern, $content, $matches)) {
+        $frontMatter = $matches[1];
+        $body = isset($matches[2]) ? $matches[2] : '';
+
+        $metadata = [];
+        $lines = explode("\n", $frontMatter);
+        foreach ($lines as $line) {
+            $parts = explode(':', $line, 2);
+            if (count($parts) == 2) {
+                $key = strtolower(trim($parts[0]));
+                $value = trim($parts[1]);
+                // Eliminar comillas dobles, simples y espacios extras
+                $value = trim($value, " \t\n\r\0\x0B\"'");
+                $metadata[$key] = $value;
+            }
+        }
+        
+        // Asegurar que existan las claves básicas
+        $result = $metadata;
+        if (!isset($result['title'])) $result['title'] = basename($filePath, '.md');
+        $result['content'] = $body;
+        
+        return $result;
+    }
+
+    return [
+        'title' => basename($filePath, '.md'),
+        'content' => $content
+    ];
+}
 ?>

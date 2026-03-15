@@ -1,3 +1,9 @@
+<?php
+/**
+ * Vista de la página de inicio (Landing) - Versión con Tailwind
+ * Se ha corregido la lógica de visualización de imágenes del Front Matter y añadido soporte para YouTube.
+ */
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,8 +23,8 @@
         <h1 class="text-2xl md:text-2xl font-bold text-gray-600 leading-none">
             <?php echo $config['app_title']; ?>
         </h1>
-        <p class="text-xl md:text-xl font-bold  text-gray-500 hover:text-green-600">
-            <a href="https://ricardoloria.com/" class="" >Ricardo Loría</a> 
+        <p class="text-xl md:text-xl font-bold text-gray-500 hover:text-green-600">
+            <a href="https://ricardoloria.com/" class="">Ricardo Loría</a> 
         </p>
     </header>
 
@@ -26,16 +32,44 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         
         <?php foreach ($recentFiles as $fileData): 
-            $preview = $fileData['preview']; // Datos ya procesados en router.php
+            $preview = $fileData['preview']; // Datos ya procesados
             $url = generateFileUrl($fileData['path']);
+            
+            // --- Lógica de corrección de imagen y soporte para YouTube ---
+            $displayImage = '';
+            if (!empty($preview['image'])) {
+                $imgUrl = $preview['image'];
+                
+                // 1. Detectar si es un enlace de YouTube
+                $youtubeRegex = '/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i';
+                
+                if (preg_match($youtubeRegex, $imgUrl, $matches)) {
+                    // Si es YouTube, obtenemos la miniatura de alta resolución
+                    $videoId = $matches[1];
+                    $displayImage = "https://img.youtube.com/vi/{$videoId}/maxresdefault.jpg";
+                } 
+                // 2. Si es una URL externa (http/https) pero no es YouTube
+                elseif (preg_match('/^https?:\/\//i', $imgUrl)) {
+                    $displayImage = $imgUrl;
+                } 
+                // 3. Si es una ruta local (ej: attachments/foto.png)
+                else {
+                    $baseUrl = isset($config['base_url']) ? rtrim($config['base_url'], '/') : '';
+                    $displayImage = $baseUrl . '/' . ltrim($imgUrl, '/');
+                }
+            }
+            // -------------------------------------------------------------
         ?>
         <article class="relative bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-auto md:h-[480px] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 group">
             
             <a href="<?php echo $url; ?>" class="absolute inset-0 z-10" aria-label="Leer más"></a>
 
-            <?php if (!empty($preview['image'])): ?>
+            <?php if (!empty($displayImage)): ?>
                 <div class="h-[240px] overflow-hidden bg-gray-100">
-                    <img src="<?php echo $preview['image']; ?>" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                    <img src="<?php echo htmlspecialchars($displayImage); ?>" 
+                         class="w-full h-full object-cover transition duration-700 group-hover:scale-110" 
+                         alt="<?php echo htmlspecialchars($preview['title']); ?>"
+                         onerror="this.src='https://img.youtube.com/vi/<?php echo $videoId ?? ''; ?>/hqdefault.jpg'; this.onerror=null;">
                 </div>
             <?php endif; ?>
 
@@ -45,8 +79,8 @@
                         <?php echo htmlspecialchars($preview['title']); ?>
                     </h2>
                     
-                    <?php if (empty($preview['image'])): ?>
-                        <p class="text-gray-600 text-bse mt-4 line-clamp-4">
+                    <?php if (empty($displayImage)): ?>
+                        <p class="text-gray-600 text-base mt-4 line-clamp-4">
                             <?php echo $preview['excerpt']; ?>
                         </p>
                     <?php endif; ?>
